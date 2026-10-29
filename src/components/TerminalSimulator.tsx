@@ -19,7 +19,8 @@ export const TerminalSimulator: React.FC = () => {
     { id: '6', type: 'system', text: '2 - Subtração (-)' },
     { id: '7', type: 'system', text: '3 - Multiplicação (*)' },
     { id: '8', type: 'system', text: '4 - Divisão (/)' },
-    { id: '9', type: 'system', text: '5 - Sair do programa' },
+    { id: '9', type: 'system', text: '5 - Porcentagem (%)' },
+    { id: '10', type: 'system', text: '6 - Sair do programa' },
   ]);
 
   // Terminal state:
@@ -63,7 +64,8 @@ export const TerminalSimulator: React.FC = () => {
       { id: '6', type: 'system', text: '2 - Subtração (-)' },
       { id: '7', type: 'system', text: '3 - Multiplicação (*)' },
       { id: '8', type: 'system', text: '4 - Divisão (/)' },
-      { id: '9', type: 'system', text: '5 - Sair do programa' },
+      { id: '9', type: 'system', text: '5 - Porcentagem (%)' },
+      { id: '10', type: 'system', text: '6 - Sair do programa' },
     ]);
     setStep('menu');
     setSelectedOp('1');
@@ -91,7 +93,7 @@ export const TerminalSimulator: React.FC = () => {
     };
 
     if (step === 'menu') {
-      if (raw === '5') {
+      if (raw === '6') {
         setLines((prev) => [
           ...prev,
           userLine,
@@ -108,22 +110,23 @@ export const TerminalSimulator: React.FC = () => {
         return;
       }
 
-      if (!['1', '2', '3', '4'].includes(raw)) {
+      if (!['1', '2', '3', '4', '5'].includes(raw)) {
         setLines((prev) => [
           ...prev,
           userLine,
           {
             id: (Date.now() + 1).toString(),
             type: 'error',
-            text: 'Opção inválida! Escolha um número de 1 a 5.',
-            pythonLine: 'if opcao not in [\'1\', \'2\', \'3\', \'4\']: continue',
+            text: 'Opção inválida! Escolha um número de 1 a 6.',
+            pythonLine: 'if opcao not in [\'1\', \'2\', \'3\', \'4\', \'5\']: continue',
           },
           { id: (Date.now() + 2).toString(), type: 'system', text: '\nEscolha a operação:' },
           { id: (Date.now() + 3).toString(), type: 'system', text: '1 - Soma (+)' },
           { id: (Date.now() + 4).toString(), type: 'system', text: '2 - Subtração (-)' },
           { id: (Date.now() + 5).toString(), type: 'system', text: '3 - Multiplicação (*)' },
           { id: (Date.now() + 6).toString(), type: 'system', text: '4 - Divisão (/)' },
-          { id: (Date.now() + 7).toString(), type: 'system', text: '5 - Sair do programa' },
+          { id: (Date.now() + 7).toString(), type: 'system', text: '5 - Porcentagem (%)' },
+          { id: (Date.now() + 8).toString(), type: 'system', text: '6 - Sair do programa' },
         ]);
         setInputVal('');
         setLastTrace('continue -> Voltou ao topo do loop');
@@ -140,7 +143,15 @@ export const TerminalSimulator: React.FC = () => {
           id: (Date.now() + 1).toString(),
           type: 'output',
           text: `Opção selecionada: ${
-            raw === '1' ? 'Soma' : raw === '2' ? 'Subtração' : raw === '3' ? 'Multiplicação' : 'Divisão'
+            raw === '1'
+              ? 'Soma'
+              : raw === '2'
+              ? 'Subtração'
+              : raw === '3'
+              ? 'Multiplicação'
+              : raw === '4'
+              ? 'Divisão'
+              : 'Porcentagem'
           }`,
         },
       ]);
@@ -223,7 +234,8 @@ export const TerminalSimulator: React.FC = () => {
         { id: (Date.now() + 5).toString(), type: 'system', text: '2 - Subtração (-)' },
         { id: (Date.now() + 6).toString(), type: 'system', text: '3 - Multiplicação (*)' },
         { id: (Date.now() + 7).toString(), type: 'system', text: '4 - Divisão (/)' },
-        { id: (Date.now() + 8).toString(), type: 'system', text: '5 - Sair do programa' },
+        { id: (Date.now() + 8).toString(), type: 'system', text: '5 - Porcentagem (%)' },
+        { id: (Date.now() + 9).toString(), type: 'system', text: '6 - Sair do programa' },
       ]);
 
       setStep('menu');
@@ -355,9 +367,15 @@ export const TerminalSimulator: React.FC = () => {
               </button>
               <button
                 onClick={() => handleQuickInput('5')}
+                className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-mono border border-slate-700"
+              >
+                5 (Porcentagem)
+              </button>
+              <button
+                onClick={() => handleQuickInput('6')}
                 className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-rose-300 text-[11px] font-mono border border-slate-700"
               >
-                5 (Sair)
+                6 (Sair)
               </button>
             </>
           )}

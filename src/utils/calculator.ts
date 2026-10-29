@@ -44,6 +44,13 @@ export function dividir(a: number, b: number): number {
 }
 
 /**
+ * Calcula a porcentagem: b% de a ((a * b) / 100)
+ */
+export function porcentagem(a: number, b: number): number {
+  return (a * b) / 100;
+}
+
+/**
  * Formata um número para exibição amigável: se for inteiro, exibe sem decimais desnecessários.
  */
 export function formatarNumero(n: number): string {
@@ -118,12 +125,23 @@ export function executarOperacao(
         explicacaoPython: `def dividir(a, b): return a / b -> dividir(${num1}, ${num2})`,
       };
 
+    case '5':
+    case '%':
+    case 'porcentagem':
+      return {
+        sucesso: true,
+        operacao: 'Porcentagem (%)',
+        expressao: `${formatarNumero(num2)}% de ${formatarNumero(num1)} = ${formatarNumero(porcentagem(num1, num2))}`,
+        resultado: porcentagem(num1, num2),
+        explicacaoPython: `def porcentagem(a, b): return (a * b) / 100 -> porcentagem(${num1}, ${num2})`,
+      };
+
     default:
       return {
         sucesso: false,
         operacao: 'Desconhecida',
         expressao: '?',
-        erro: 'Opção inválida! Escolha entre 1 e 4.',
+        erro: 'Opção inválida! Escolha entre 1 e 5.',
         explicacaoPython: `else: print("Opção inválida!")`,
       };
   }
