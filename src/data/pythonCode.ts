@@ -34,6 +34,10 @@ def dividir(a, b):
         return "Erro: Não é possível dividir por zero!"
     return a / b
 
+def porcentagem(a, b):
+    """Recebe o valor base (a) e a taxa percentual (b), retornando b% de a."""
+    return (a * b) / 100
+
 # 2. PROGRAMA PRINCIPAL
 def calculadora():
     print("=" * 40)
@@ -47,18 +51,19 @@ def calculadora():
         print("2 - Subtração (-)")
         print("3 - Multiplicação (*)")
         print("4 - Divisão (/)")
-        print("5 - Sair do programa")
+        print("5 - Porcentagem (%)")
+        print("6 - Sair do programa")
         
-        opcao = input("\\nDigite o número da operação (1-5): ").strip()
+        opcao = input("\\nDigite o número da operação (1-6): ").strip()
         
-        # Se escolher 5, usamos 'break' para encerrar o loop
-        if opcao == '5':
+        # Se escolher 6, usamos 'break' para encerrar o loop
+        if opcao == '6':
             print("\\nEncerrando a calculadora. Bons estudos!")
             break
             
         # Verifica se digitou uma opção válida
-        if opcao not in ['1', '2', '3', '4']:
-            print("Opção inválida! Escolha um número de 1 a 5.")
+        if opcao not in ['1', '2', '3', '4', '5']:
+            print("Opção inválida! Escolha um número de 1 a 6.")
             continue
             
         # O bloco try/except evita que o programa 'trave' se alguém digitar texto
@@ -82,6 +87,9 @@ def calculadora():
         elif opcao == '4':
             resultado = dividir(num1, num2)
             print(f"\\n-> Resultado: {num1} ÷ {num2} = {resultado}")
+        elif opcao == '5':
+            resultado = porcentagem(num1, num2)
+            print(f"\\n-> Resultado: {num2}% de {num1} = {resultado}")
 
 # 3. PONTO DE EXECUÇÃO
 # Esta linha garante que o programa só execute quando o arquivo for rodado diretamente

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { somar, subtrair, multiplicar, dividir, formatarNumero } from '../utils/calculator';
+import { somar, subtrair, multiplicar, dividir, porcentagem, formatarNumero } from '../utils/calculator';
 import { Delete, RotateCcw, ArrowRight, Code } from 'lucide-react';
 
 interface HistoryItem {
@@ -13,7 +13,7 @@ interface HistoryItem {
 export const InteractiveCalculator: React.FC = () => {
   const [display, setDisplay] = useState<string>('0');
   const [prevValue, setPrevValue] = useState<number | null>(null);
-  const [operator, setOperator] = useState<'+' | '-' | '*' | '/' | null>(null);
+  const [operator, setOperator] = useState<'+' | '-' | '*' | '/' | '%' | null>(null);
   const [waitingForNext, setWaitingForNext] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [activePythonCode, setActivePythonCode] = useState<string>(
@@ -51,7 +51,7 @@ export const InteractiveCalculator: React.FC = () => {
     setActivePythonCode('# Calculadora reiniciada. Escolha um número.');
   };
 
-  const handleOperator = (op: '+' | '-' | '*' | '/') => {
+  const handleOperator = (op: '+' | '-' | '*' | '/' | '%') => {
     const current = parseFloat(display);
 
     if (prevValue !== null && operator && !waitingForNext) {
@@ -64,12 +64,12 @@ export const InteractiveCalculator: React.FC = () => {
       setOperator(op);
       setWaitingForNext(true);
       const funcName =
-        op === '+' ? 'somar' : op === '-' ? 'subtrair' : op === '*' ? 'multiplicar' : 'dividir';
+        op === '+' ? 'somar' : op === '-' ? 'subtrair' : op === '*' ? 'multiplicar' : op === '/' ? 'dividir' : 'porcentagem';
       setActivePythonCode(`num1 = ${current}\noperacao = '${op}'  # Chamará a função ${funcName}(a, b)`);
     }
   };
 
-  const executeCalculation = (a: number, b: number, op: '+' | '-' | '*' | '/') => {
+  const executeCalculation = (a: number, b: number, op: '+' | '-' | '*' | '/' | '%') => {
     let result = 0;
     let snippet = '';
     let isErr = false;
@@ -94,6 +94,9 @@ export const InteractiveCalculator: React.FC = () => {
           result = dividir(a, b);
           snippet = `def dividir(${a}, ${b}):\n    return ${a} / ${b}  # -> ${result}`;
         }
+      } else if (op === '%') {
+        result = porcentagem(a, b);
+        snippet = `def porcentagem(${a}, ${b}):\n    return (${a} * ${b}) / 100  # -> ${result} (${b}% de ${a})`;
       }
 
       if (!isErr) {
@@ -171,10 +174,10 @@ export const InteractiveCalculator: React.FC = () => {
           {/* Row 1 */}
           <button
             onClick={handleClear}
-            className="col-span-2 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 font-semibold text-sm transition border border-slate-700/60"
+            className="py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 font-semibold text-sm transition border border-slate-700/60"
             aria-label="Limpar tudo"
           >
-            Limpar (AC)
+            AC
           </button>
           <button
             onClick={() => {
@@ -188,6 +191,17 @@ export const InteractiveCalculator: React.FC = () => {
             aria-label="Apagar último dígito"
           >
             <Delete className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => handleOperator('%')}
+            className={`py-3 rounded-xl font-bold text-lg transition border ${
+              operator === '%'
+                ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20'
+                : 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border-amber-500/30'
+            }`}
+            aria-label="Porcentagem"
+          >
+            %
           </button>
           <button
             onClick={() => handleOperator('/')}

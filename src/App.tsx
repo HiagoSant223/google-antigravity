@@ -146,7 +146,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span>🐍 Calculadora Python para Iniciantes</span>
             <span>•</span>
-            <span>Soma, Subtração, Multiplicação e Divisão</span>
+            <span>Soma, Subtração, Multiplicação, Divisão e Porcentagem</span>
           </div>
           <div>
             Desenvolvido com foco didático para quem está aprendendo a programar.
